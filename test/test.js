@@ -1,43 +1,45 @@
-/* jshint esversion: 6 */
-/* jslint node: true */
-'use strict';
+import * as t from "https://deno.land/std/testing/asserts.ts";
+import { canonicalize } from "../canonicalize.js";
 
-JSON.canonicalize = require('../');
-const test = require('ava');
-const jsonfile = require('jsonfile');
-const fs = require('fs');
+JSON.canonicalize = canonicalize;
+const jsonfile = {
+  readFileSync: (fn) => JSON.parse(Deno.readTextFileSync(fn)),
+};
+const fs = {
+  readFileSync: (fn) => Deno.readTextFileSync(fn),
+};
 
-test('arrays', t => {
+Deno.test('arrays', () => {
   const input = jsonfile.readFileSync('test/testdata/input/arrays.json');
   const expected = fs.readFileSync('test/testdata/output/arrays.json', 'utf8').trim();
   const actual = JSON.canonicalize(input);
-  t.is(actual, expected);
+  t.assertEquals(actual, expected);
 });
 
-test('french', t => {
+Deno.test('french', () => {
   const input = jsonfile.readFileSync('test/testdata/input/french.json');
   const expected = fs.readFileSync('test/testdata/output/french.json', 'utf8').trim();
   const actual = JSON.canonicalize(input);
-  t.is(actual, expected);
+  t.assertEquals(actual, expected);
 });
 
-test('structures', t => {
+Deno.test('structures', () => {
   const input = jsonfile.readFileSync('test/testdata/input/structures.json');
   const expected = fs.readFileSync('test/testdata/output/structures.json', 'utf8').trim();
   const actual = JSON.canonicalize(input);
-  t.is(actual, expected);
+  t.assertEquals(actual, expected);
 });
 
-test('values', t => {
+Deno.test('values', () => {
   const input = jsonfile.readFileSync('test/testdata/input/values.json');
   const expected = fs.readFileSync('test/testdata/output/values.json', 'utf8').trim();
   const actual = JSON.canonicalize(input);
-  t.is(actual, expected);
+  t.assertEquals(actual, expected);
 });
 
-test('weird', t => {
+Deno.test('weird', () => {
   const input = jsonfile.readFileSync('test/testdata/input/weird.json');
   const expected = fs.readFileSync('test/testdata/output/weird.json', 'utf8').trim();
   const actual = JSON.canonicalize(input);
-  t.is(actual, expected);
+  t.assertEquals(actual, expected);
 });
